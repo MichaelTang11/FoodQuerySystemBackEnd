@@ -16,9 +16,9 @@ url = {
     (r'/Ingredient/Delete', delete_ingredient_handler),
     (r'/Ingredient/Query', query_ingredients_handler),
 
-    (r'/Food/Save', save_ingredient_handler),
-    (r'/Food/Delete', delete_ingredient_handler),
-    (r'/Food/Query', query_ingredients_handler)
+    (r'/Food/Save', save_food_handler),
+    (r'/Food/Delete', delete_food_handler),
+    (r'/Food/Query', query_food_handler)
     # 测试路由
     # (r'/Test', TestHandler)
 }

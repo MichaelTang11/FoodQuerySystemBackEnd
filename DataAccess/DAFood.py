@@ -104,7 +104,8 @@ def get_foods(food_name: str, page_entity: PageEntity):
             return None
         else:
             result = []
-            for row in cursor.fetchall():
+            rows = cursor.fetchall()
+            for row in rows:
                 food = FoodEntity()
                 food.food_id = row['food_id']
                 food.food_name = row['food_name']
@@ -118,9 +119,12 @@ def get_foods(food_name: str, page_entity: PageEntity):
                     WHERE T1.food_id=%s''',
                     food.food_id
                 )
-                for _row in cursor.fetchall():
+                _rows = cursor.fetchall()
+                ingredients = []
+                for _row in _rows:
                     ingredient = TB_FQS_Ingredient(_row['id'], _row['ingredient_name'], _row['ingredient_info'])
-                    food.ingredients.append(ingredient)
+                    ingredients.append(ingredient)
+                food.ingredients = ingredients
                 result.append(food)
             cursor.execute('SELECT COUNT(0) AS number FROM tb_fqs_food')
             page_entity.total_row = cursor.fetchone()['number']
@@ -148,7 +152,8 @@ def get_foods(food_name: str, page_entity: PageEntity):
             return None
         else:
             result = []
-            for row in cursor.fetchall():
+            rows = cursor.fetchall()
+            for row in rows:
                 food = FoodEntity()
                 food.food_id = row['food_id']
                 food.food_name = row['food_name']
@@ -162,9 +167,12 @@ def get_foods(food_name: str, page_entity: PageEntity):
                     WHERE T1.food_id=%s''',
                     food.food_id
                 )
-                for _row in cursor.fetchall():
+                _rows = cursor.fetchall()
+                ingredients = []
+                for _row in _rows:
                     ingredient = TB_FQS_Ingredient(_row['id'], _row['ingredient_name'], _row['ingredient_info'])
-                    food.ingredients.append(ingredient)
+                    ingredients.append(ingredient)
+                food.ingredients = ingredients
                 result.append(food)
             cursor.execute('SELECT COUNT(0) AS number FROM tb_fqs_food WHERE food_name LIKE %s', '%' + food_name + '%')
             page_entity.total_row = cursor.fetchone()['number']
@@ -176,10 +184,14 @@ def get_foods(food_name: str, page_entity: PageEntity):
 def insert_food(food_name: str, brand_id: int, type_id: int, ingredient_ids: list):
     cursor.execute(
         '''INSERT INTO tb_fqs_food(`food_name`,`brand_id`,`type_id`) VALUES(%s,%s,%s);
-        SELECT LAST_INSERT_ID() AS 'food_id' ''',
+        ''',
         (food_name, brand_id, type_id)
     )
-    food_id = cursor.fetchone()['food_id']
+    cursor.execute('SELECT LAST_INSERT_ID();')
+    row=cursor.fetchone()
+    food_id=0
+    for item in row:
+        food_id = row[item]
     for ingredient_id in ingredient_ids:
         cursor.execute(
             'INSERT INTO tb_fqs_food_r_ingredient(`food_id`,`ingredient_id`) VALUES(%s,%s)',

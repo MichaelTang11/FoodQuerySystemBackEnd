@@ -28,14 +28,14 @@ class save_type_handler(tornado.web.RequestHandler):
             response.data = affected_rows
             logging.info('保存类型影响行数:' + str(affected_rows))
         except CustomException as cex:
-            response.code = ResponseCode.ERROR
-            response.error_message = str(cex)
-            logging.info(str(cex))
+            response.code = ResponseCode.ERROR.value
+            response.error_message = cex.value
+            logging.info(cex.value)
         except Exception:
-            response.code = ResponseCode.ERROR
+            response.code = ResponseCode.ERROR.value
             response.error_message = '保存类型发生异常'
             logging.error('保存类型发生异常:' + traceback.format_exc())
-        self.write(json.dumps(response, cls=CustomEncoder, ensure_ascii=False))
+        self.write(json.dumps(dict(response), ensure_ascii=False))
 
 
 class delete_type_handler(tornado.web.RequestHandler):
@@ -47,14 +47,14 @@ class delete_type_handler(tornado.web.RequestHandler):
             logging.info('删除类型影响行数:' + str(affected_rows))
             response.data = affected_rows
         except CustomException as cex:
-            response.code = ResponseCode.ERROR
-            response.error_message = str(cex)
-            logging.info(str(cex))
+            response.code = ResponseCode.ERROR.value
+            response.error_message = cex.value
+            logging.info(cex.value)
         except Exception:
-            response.code = ResponseCode.ERROR
+            response.code = ResponseCode.ERROR.value
             response.error_message = '删除类型发生异常'
             logging.error('删除类型发生异常:' + traceback.format_exc())
-        self.write(json.dumps(response, cls=CustomEncoder, ensure_ascii=False))
+        self.write(json.dumps(dict(response), ensure_ascii=False))
 
 
 class query_types_handler(tornado.web.RequestHandler):
@@ -77,11 +77,11 @@ class query_types_handler(tornado.web.RequestHandler):
                 response.data = DataAccess.DAType.get_types(type_name, page)
                 response.page_entity = page
         except CustomException as cex:
-            response.code = ResponseCode.ERROR
-            response.error_message = str(cex)
-            logging.info(str(cex))
+            response.code = ResponseCode.ERROR.value
+            response.error_message = cex
+            logging.info(cex)
         except Exception:
-            response.code = ResponseCode.ERROR
+            response.code = ResponseCode.ERROR.value
             response.error_message = '查询类型发生异常'
             logging.error('查询类型发生异常:' + traceback.format_exc())
-        self.write(json.dumps(response, cls=CustomEncoder, ensure_ascii=False))
+        self.write(json.dumps(dict(response), ensure_ascii=False))

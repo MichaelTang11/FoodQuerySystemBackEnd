@@ -1,11 +1,8 @@
 import json
 from enum import Enum, unique
-from DataAccess.DataModel import *
 from Common.JsonEncoder import *
-
-
-class CustomObject:
-    is_custom = True
+from DataAccess.DataModel import *
+from BizModel.CustomObject import *
 
 
 @unique
@@ -22,23 +19,29 @@ class PageEntity(CustomObject):
     order_by = ''
 
     def __str__(self):
-        return "{'page_index':" + str(self.page_index) + ",'page_size':" + str(self.page_size) + ",'page_count':" + str(
-            self.page_count) + ",'total_row':" + str(self.total_row) + ",'order_by':'" + self.order_by + "'}"
+        return '{"page_index":' + str(self.page_index) + ',"page_size":' + str(self.page_size) + ',"page_count":' + str(
+            self.page_count) + ',"total_row":' + str(self.total_row) + ',"order_by":"' + self.order_by + '"}'
+
+    def keys(self):
+        return 'page_index', 'page_size', 'page_count', 'total_row', 'order_by'
 
 
 class ResponseEntity(CustomObject):
-    code = ResponseCode.SUCCESS
+    code = ResponseCode.SUCCESS.value
     data = None
     error_message = None
     page_entity = PageEntity()
 
     def __str__(self):
-        return "{" + "'code':{0},'data':{1},'error_message':{2},'page_entity':{3}".format(
+        return '{' + '"code":{0},"data":{1},"error_message":{2},"page_entity":{3}'.format(
             str(self.code.value),
             'null' if self.data is None else str(self.data),
             'null' if self.error_message is None else self.error_message,
             str(self.page_entity)
-        ) + "}"
+        ) + '}'
+
+    def keys(self):
+        return 'code', 'data', 'error_message', 'page_entity'
 
 
 class CustomException(Exception, CustomObject):
@@ -57,10 +60,13 @@ class FoodEntity(CustomObject):
     ingredients = []
 
     def __str__(self):
-        return "{" + "'food_id':{0},'food_name':{1},'type':{2},'brand':{3},'ingredients':{4}".format(
+        return "{" + '"food_id":{0},"food_name":{1},"type":{2},"brand":{3},"ingredients":{4}'.format(
             str(self.food_id),
-            "'" + self.food_name + "'",
+            '"' + self.food_name + '"',
             json.dumps(self.type, cls=CustomEncoder, ensure_ascii=False),
             json.dumps(self.brand, cls=CustomEncoder, ensure_ascii=False),
             json.dumps(self.ingredients, cls=CustomEncoder, ensure_ascii=False)
         ) + "}"
+
+    def keys(self):
+        return 'food_id', 'food_name', 'type', 'brand', 'ingredients'

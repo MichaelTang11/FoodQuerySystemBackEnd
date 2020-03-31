@@ -1,7 +1,7 @@
-from BizModel.Entity import CustomObject
+from BizModel.CustomObject import *
 
 
-class TB_FQS_Brand:
+class TB_FQS_Brand(CustomObject):
     id = None
     brand_name = None
 
@@ -10,13 +10,16 @@ class TB_FQS_Brand:
         self.brand_name = brand_name
 
     def __str__(self):
-        return "{" + "'id':{0},'brand_name':{1}".format(
+        return '{' + '"id":{0},"brand_name":{1}'.format(
             str(self.id),
-            "'" + self.brand_name + "'"
+            '"' + self.brand_name + '"'
         ) + "}"
 
     def __repr__(self):
         return str(self)
+
+    def keys(self):
+        return 'id', 'brand_name'
 
 
 class TB_FQS_Food(CustomObject):
@@ -32,15 +35,18 @@ class TB_FQS_Food(CustomObject):
         self.type_id = type_id
 
     def __str__(self):
-        return "{" + "'id':{0},'food_name':{1},'brand_id':{2},'type_id':{3}".format(
+        return '{' + '"id":{0},"food_name":{1},"brand_id":{2},"type_id":{3}'.format(
             str(self.id),
-            "'" + self.food_name + "'",
+            '"' + self.food_name + '"',
             self.brand_id,
             str(self.type_id)
-        ) + "}"
+        ) + '}'
 
     def __repr__(self):
         return str(self)
+
+    def keys(self):
+        return 'id', 'food_name', 'brand_id', 'type_id'
 
 
 class TB_FQS_Food_R_Ingredient(CustomObject):
@@ -54,7 +60,7 @@ class TB_FQS_Food_R_Ingredient(CustomObject):
         self.ingredient_id = ingredient_id
 
     def __str__(self):
-        return "{" + "'id':{0},'brand_name':{1},'ingredient_id':{2}".format(
+        return '{' + '"id":{0},"brand_name":{1},"ingredient_id":{2}'.format(
             str(self.id),
             str(self.food_id),
             str(self.ingredient_id)
@@ -62,6 +68,9 @@ class TB_FQS_Food_R_Ingredient(CustomObject):
 
     def __repr__(self):
         return str(self)
+
+    def keys(self):
+        return 'id', 'food_id', 'ingredient_id'
 
 
 class TB_FQS_Ingredient(CustomObject):
@@ -75,14 +84,17 @@ class TB_FQS_Ingredient(CustomObject):
         self.ingredient_info = ingredient_info
 
     def __str__(self):
-        return "{" + "'id':{0},'ingredient_name':{1},'ingredient_info':{2}".format(
+        return "{" + '"id":{0},"ingredient_name":{1},"ingredient_info":{2}'.format(
             str(self.id),
-            "'" + str(self.ingredient_name) + "'",
-            "'" + str(self.ingredient_info) + "'"
+            '"' + str(self.ingredient_name) + '"',
+            '"' + str(self.ingredient_info) + '"'
         ) + "}"
 
     def __repr__(self):
         return str(self)
+
+    def keys(self):
+        return 'id', 'ingredient_name', 'ingredient_info'
 
 
 class TB_FQS_Type(CustomObject):
@@ -94,10 +106,13 @@ class TB_FQS_Type(CustomObject):
         self.type_name = type_name
 
     def __str__(self):
-        return "{" + "'id':{0},'type_name':{1}".format(
+        return "{" + '"id":{0},"type_name":{1}'.format(
             str(self.id),
-            "'" + str(self.type_name) + "'",
+            '"' + str(self.type_name) + '"',
         ) + "}"
 
     def __repr__(self):
         return str(self)
+
+    def keys(self):
+        return 'id', 'type_name'

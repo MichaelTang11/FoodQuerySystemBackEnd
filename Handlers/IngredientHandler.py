@@ -37,14 +37,14 @@ class save_ingredient_handler(tornado.web.RequestHandler):
             response.data = affected_rows
             logging.info('保存配料影响行数:' + str(affected_rows))
         except CustomException as cex:
-            response.code = ResponseCode.ERROR
-            response.error_message = str(cex)
-            logging.info(str(cex))
+            response.code = ResponseCode.ERROR.value
+            response.error_message = cex.value
+            logging.info(cex.value)
         except Exception:
-            response.code = ResponseCode.ERROR
+            response.code = ResponseCode.ERROR.value
             response.error_message = '保存配料发生异常'
             logging.error('保存配料发生异常:' + traceback.format_exc())
-        self.write(json.dumps(response, cls=CustomEncoder, ensure_ascii=False))
+        self.write(json.dumps(dict(response), ensure_ascii=False))
 
 
 class delete_ingredient_handler(tornado.web.RequestHandler):
@@ -56,14 +56,14 @@ class delete_ingredient_handler(tornado.web.RequestHandler):
             logging.info('删除配料影响行数:' + str(affected_rows))
             response.data = affected_rows
         except CustomException as cex:
-            response.code = ResponseCode.ERROR
-            response.error_message = str(cex)
-            logging.info(str(cex))
+            response.code = ResponseCode.ERROR.value
+            response.error_message = cex.value
+            logging.info(cex.value)
         except Exception:
-            response.code = ResponseCode.ERROR
+            response.code = ResponseCode.ERROR.value
             response.error_message = '删除配料发生异常'
             logging.error('删除配料发生异常:' + traceback.format_exc())
-        self.write(json.dumps(response, cls=CustomEncoder, ensure_ascii=False))
+        self.write(json.dumps(dict(response), ensure_ascii=False))
 
 
 class query_ingredients_handler(tornado.web.RequestHandler):
@@ -86,11 +86,11 @@ class query_ingredients_handler(tornado.web.RequestHandler):
                 response.data = DataAccess.DAIngredient.get_ingredients(ingredient_name, page)
                 response.page_entity = page
         except CustomException as cex:
-            response.code = ResponseCode.ERROR
-            response.error_message = str(cex)
-            logging.info(str(cex))
+            response.code = ResponseCode.ERROR.value
+            response.error_message = cex.value
+            logging.info(cex.value)
         except Exception:
-            response.code = ResponseCode.ERROR
+            response.code = ResponseCode.ERROR.value
             response.error_message = '查询配料发生异常'
             logging.error('查询配料发生异常:' + traceback.format_exc())
-        self.write(json.dumps(response, cls=CustomEncoder, ensure_ascii=False))
+        self.write(json.dumps(dict(response), ensure_ascii=False))

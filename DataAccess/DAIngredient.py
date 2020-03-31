@@ -1,7 +1,7 @@
 from Common.DBConnection import cursor
 from BizModel.Entity import *
 import math
-from DataAccess.DataModel import TB_FQS_Ingredient
+from DataAccess.DataModel import *
 
 
 def get_ingredient(ingredient_id: int):

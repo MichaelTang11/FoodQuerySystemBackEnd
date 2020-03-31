@@ -1,5 +1,5 @@
 from Common.DBConnection import cursor
-from DataAccess.DataModel import TB_FQS_Brand
+from DataAccess.DataModel import *
 from BizModel.Entity import PageEntity
 import math
 

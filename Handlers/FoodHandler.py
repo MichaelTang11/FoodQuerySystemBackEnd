@@ -3,20 +3,21 @@ import tornado.web
 import DataAccess.DAFood
 from BizModel.Entity import *
 from Common.JsonEncoder import *
+from DataAccess.DataModel import *
 import traceback
 
 
-class SaveFoodHandler(tornado.web.RequestHandler):
+class save_food_handler(tornado.web.RequestHandler):
     def post(self, *args, **kwargs):
         response = ResponseEntity()
         try:
-            params = self.request.arguments
+            params = json.loads(self.request.body)
             param_keys = params.keys()
-            food_id = int(self.get_argument("food_id")) if 'food_id' in param_keys else None
-            food_name = self.get_argument("food_name") if 'food_name' in param_keys else None
-            brand_id = int(self.get_argument("brand_id")) if 'brand_id' in param_keys else None
-            type_id = int(self.get_argument("type_id")) if 'type_id' in param_keys else None
-            ingredient_ids = list(self.get_argument("ingredient_ids")) if 'ingredient_ids' in param_keys else None
+            food_id = params['food_id'] if 'food_id' in param_keys else None
+            food_name =params['food_name']  if 'food_name' in param_keys else None
+            brand_id = params['brand_id'] if 'brand_id' in param_keys else None
+            type_id = params['type_id'] if 'type_id' in param_keys else None
+            ingredient_ids = params['ingredient_ids'] if 'ingredient_ids' in param_keys else None
             if food_name is None or len(food_name.strip()) == 0:
                 raise CustomException('必须输入食品名')
             if brand_id is None:
@@ -36,14 +37,14 @@ class SaveFoodHandler(tornado.web.RequestHandler):
                     result = DataAccess.DAFood.update_food(food_id, food_name, brand_id, type_id, ingredient_ids)
             response.data = result
         except CustomException as cex:
-            response.code = ResponseCode.ERROR
-            response.error_message = str(cex)
-            logging.info(str(cex))
+            response.code = ResponseCode.ERROR.value
+            response.error_message = cex.value
+            logging.info(cex.value)
         except Exception:
-            response.code = ResponseCode.ERROR
+            response.code = ResponseCode.ERROR.value
             response.error_message = '保存食品发生异常'
             logging.error('保存食品发生异常:' + traceback.format_exc())
-        self.write(json.dumps(response, cls=CustomEncoder, ensure_ascii=False))
+        self.write(json.dumps(dict(response), ensure_ascii=False))
 
 
 class delete_food_handler(tornado.web.RequestHandler):
@@ -53,17 +54,17 @@ class delete_food_handler(tornado.web.RequestHandler):
             food_id = int(self.get_argument("food_id"))
             response.data = DataAccess.DAFood.delete_food(food_id)
         except CustomException as cex:
-            response.code = ResponseCode.ERROR
-            response.error_message = str(cex)
-            logging.info(str(cex))
+            response.code = ResponseCode.ERROR.value
+            response.error_message = cex.value
+            logging.info(cex.value)
         except Exception:
-            response.code = ResponseCode.ERROR
+            response.code = ResponseCode.ERROR.value
             response.error_message = '删除食品发生异常'
             logging.error('删除食品发生异常:' + traceback.format_exc())
-        self.write(json.dumps(response, cls=CustomEncoder, ensure_ascii=False))
+        self.write(json.dumps(dict(response), ensure_ascii=False))
 
 
-class QueryFoodHandler(tornado.web.RequestHandler):
+class query_food_handler(tornado.web.RequestHandler):
     def post(self, *args, **kwargs):
         response = ResponseEntity()
         try:
@@ -83,11 +84,11 @@ class QueryFoodHandler(tornado.web.RequestHandler):
                 response.data = DataAccess.DAFood.get_foods(food_name, page)
                 response.page_entity = page
         except CustomException as cex:
-            response.code = ResponseCode.ERROR
-            response.error_message = str(cex)
-            logging.info(str(cex))
+            response.code = ResponseCode.ERROR.value
+            response.error_message = cex.value
+            logging.info(cex.value)
         except Exception:
-            response.code = ResponseCode.ERROR
+            response.code = ResponseCode.ERROR.value
             response.error_message = '查询食品发生异常'
             logging.error('查询食品发生异常:' + traceback.format_exc())
-        self.write(json.dumps(response, cls=CustomEncoder, ensure_ascii=False))
+        self.write(json.dumps(dict(response), ensure_ascii=False))
